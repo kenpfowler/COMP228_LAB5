@@ -8,6 +8,7 @@ public class Controller {
 
     public void PrintDB()
     {
+        SQLiteDB.InsertPlayerInformation();
         txtAreaSummary.setText(SQLiteDB.GetFromDB());
     }
 
