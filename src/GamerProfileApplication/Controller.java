@@ -5,8 +5,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 
-public class Controller {
+import java.util.concurrent.atomic.AtomicReference;
 
+public class Controller {
+    @FXML
+    ComboBox cbxPlayerIdSummary;
     @FXML
     TextArea txtAreaSummary;
     @FXML
@@ -31,7 +34,9 @@ public class Controller {
     @FXML
     private void initialize()
     {
-        cbxPlayerId.setItems(SQLiteDB.GetUserIds());
+        ObservableList<Integer> ids = SQLiteDB.GetUserIds();
+        cbxPlayerId.setItems(ids);
+        cbxPlayerIdSummary.setItems(ids);
     }
 
     //monitor if a player has been selected
@@ -96,4 +101,45 @@ public class Controller {
         txtAreaSummary.setText(SQLiteDB.GetPlayersFromDB());
     }
 
+
+    public void PrintPlayerAndGameReport()
+    {
+        if (cbxPlayerIdSummary.getValue() != null) {
+            txtAreaSummary.setText("");
+            AtomicReference<String> contents = new AtomicReference<>("");
+
+            SQLiteDB.GetSpecificPlayerGameReport(Integer.parseInt(String.valueOf(cbxPlayerIdSummary.getValue()))).forEach(item -> {
+                contents.updateAndGet(v -> v + item.player_game_id + " | " + item.game_id + " | " + item.player_id + " | " + item.playing_date + " | " + item.score + "\n");
+            });
+            if (contents.toString() == "")
+            {
+                contents.set("Player with this ID has no played games");
+            }
+            txtAreaSummary.setText(contents.toString());
+        }
+        else
+        {
+            txtAreaSummary.setText("");
+            AtomicReference<String> contents = new AtomicReference<>("");
+
+            SQLiteDB.GetPlayerGameReport().forEach(item -> {
+                contents.updateAndGet(v -> v + item.player_game_id + " | " + item.game_id + " | " + item.player_id + " | " + item.playing_date + " | " + item.score + "\n");
+            });
+            txtAreaSummary.setText(contents.toString());
+        }
+
+    }
+
+    public void ClearFields()
+    {
+        txtAreaSummary.setText("");
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtAddress.setText("");
+        txtPostalCode.setText("");
+        txtProvince.setText("");
+        txtPhoneNumber.setText("");
+        cbxPlayerId.getSelectionModel().clearSelection();
+        cbxPlayerIdSummary.getSelectionModel().clearSelection();
+    }
 }

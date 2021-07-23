@@ -8,29 +8,15 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.ColumnConstraints?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<GridPane alignment="center" minHeight="293.0" minWidth="755.0" prefHeight="293.0" prefWidth="755.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GamerProfileApplication.Controller">
-   <columnConstraints>
-      <ColumnConstraints />
-      <ColumnConstraints maxWidth="348.0" minWidth="275.99998779296874" prefWidth="348.0" />
-      <ColumnConstraints maxWidth="85.5999755859375" minWidth="0.0" prefWidth="0.0" />
-      <ColumnConstraints maxWidth="277.60002441406255" minWidth="400.0" prefWidth="207.99998779296868" />
-   </columnConstraints>
-   <rowConstraints>
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-      <RowConstraints />
-   </rowConstraints>
-   <children>
-      <MenuBar prefHeight="26.0" prefWidth="553.0" GridPane.columnIndex="1" GridPane.columnSpan="3">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="706.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="GamerProfileApplication.Controller">
+   <top>
+      <MenuBar BorderPane.alignment="CENTER">
         <menus>
           <Menu mnemonicParsing="false" text="File">
             <items>
@@ -49,42 +35,46 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TextArea fx:id="txtAreaSummary" prefHeight="200.0" prefWidth="241.0" GridPane.columnIndex="3" GridPane.rowIndex="1" />
-      <VBox prefHeight="200.0" prefWidth="271.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+   </top>
+   <left>
+      <VBox prefHeight="349.0" prefWidth="226.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Create Player Account">
+            <Label text="Register/Edit Player">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>
             </Label>
-            <Region prefHeight="200.0" prefWidth="200.0" />
             <TextField fx:id="txtFirstName" promptText="First Name" />
             <TextField fx:id="txtLastName" promptText="Last Name" />
             <TextField fx:id="txtAddress" promptText="Address" />
             <TextField fx:id="txtPostalCode" promptText="Postal Code" />
             <TextField fx:id="txtProvince" promptText="Province" />
             <TextField fx:id="txtPhoneNumber" promptText="Phone Number" />
+            <Button mnemonicParsing="false" onAction="#InsertPlayerInformation" prefHeight="26.0" prefWidth="236.0" text="Create Player" />
+            <HBox prefHeight="28.0" prefWidth="194.0">
+               <children>
+                  <ComboBox fx:id="cbxPlayerId" onAction="#PopulateFieldsToUpdate" prefHeight="26.0" prefWidth="114.0" promptText="Select Player" />
+                  <Button mnemonicParsing="false" onAction="#UpdatePlayerInformation" prefHeight="26.0" prefWidth="118.0" text="Update Player" />
+               </children>
+            </HBox>
+            <Region prefHeight="200.0" prefWidth="200.0" />
+            <TextField fx:id="txtGameTitle" promptText="Title" />
+            <Button mnemonicParsing="false" onAction="#InsertGameTitle" prefHeight="26.0" prefWidth="230.0" text="Add Game" />
          </children>
       </VBox>
-      <HBox prefHeight="26.0" prefWidth="200.0" GridPane.columnIndex="3" GridPane.rowIndex="2">
+   </left>
+   <center>
+      <TextArea fx:id="txtAreaSummary" prefHeight="349.0" prefWidth="385.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <HBox prefHeight="24.0" prefWidth="600.0" BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="txtGameTitle" prefHeight="26.0" prefWidth="122.0" promptText="Game Title" />
-            <Button mnemonicParsing="false" onAction="#InsertGameTitle" prefHeight="26.0" prefWidth="90.0" text="Add Game" />
+            <Button mnemonicParsing="false" onAction="#PrintGames" prefHeight="26.0" prefWidth="140.0" text="Show Game Titles" />
+            <Button mnemonicParsing="false" onAction="#PrintPlayers" prefHeight="26.0" prefWidth="154.0" text="Show Players" />
+            <ComboBox fx:id="cbxPlayerIdSummary" prefHeight="26.0" prefWidth="123.0" promptText="Select Player" />
+            <Button mnemonicParsing="false" onAction="#PrintPlayerAndGameReport" prefHeight="26.0" prefWidth="168.0" text="Print Played Games Report" />
+            <Button mnemonicParsing="false" onAction="#ClearFields" prefHeight="26.0" prefWidth="173.0" text=" Clear All" />
          </children>
       </HBox>
-      <HBox prefHeight="28.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-         <children>
-            <ComboBox fx:id="cbxPlayerId" onAction="#PopulateFieldsToUpdate" prefWidth="150.0" promptText="Enter Player ID" />
-            <Button mnemonicParsing="false" onAction="#UpdatePlayerInformation" prefHeight="26.0" prefWidth="103.0" text="Update Player" />
-            <Button mnemonicParsing="false" onAction="#InsertPlayerInformation" prefHeight="26.0" prefWidth="94.0" text="Create Player" />
-         </children>
-      </HBox>
-      <HBox prefHeight="26.0" prefWidth="208.0" GridPane.columnIndex="1" GridPane.rowIndex="3">
-         <children>
-            <Button mnemonicParsing="false" onAction="#PrintPlayers" text="Show Players" />
-            <Button mnemonicParsing="false" onAction="#PrintGames" text="Show Games" />
-            <Button mnemonicParsing="false" text="Show players and Games" />
-         </children>
-      </HBox>
-   </children>
-</GridPane>
+   </bottom>
+</BorderPane>

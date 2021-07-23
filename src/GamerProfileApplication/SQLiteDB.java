@@ -1,12 +1,12 @@
 package GamerProfileApplication;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.List;
 import java.sql.*;
 
 public class SQLiteDB {
    private static String jbdcURL = "jdbc:sqlite:/C:\\Users\\kenpf\\IdeaProjects\\KenFowler_COMP228Lab5\\gamerprofile.db";
+
+
 
    //allows user to update a players profile
    public  static void UpdatePlayerInformation(int userId, String firstName, String lastName, String address, String postalCode, String province, String phoneNumber)
@@ -193,7 +193,7 @@ public class SQLiteDB {
         }
     }
 
-  //get user information from database based on userid selected
+  //READ player information from database based on userid selected
   public static ObservableList<String> GetUserInformationById(int userId)
   {
       ObservableList<String> userInformation = FXCollections.observableArrayList();
@@ -230,7 +230,7 @@ public class SQLiteDB {
       }
   }
 
-    //get all user ids from database
+    //READ all player ids from database
     public static ObservableList<Integer> GetUserIds()
     {
         ObservableList<Integer> userIds = FXCollections.observableArrayList();
@@ -265,4 +265,108 @@ public class SQLiteDB {
         }
     }
 
+    public static class PlayerAndGame
+    {
+        int player_game_id;
+        int game_id;
+        int player_id;
+        Date playing_date;
+        int score;
+
+        public PlayerAndGame(int player_game_id, int game_id, int player_id, Date playing_date, int score)
+        {
+            this.player_game_id = player_game_id;
+            this.game_id = game_id;
+            this.player_id = player_id;
+            this.playing_date = playing_date;
+            this.score = score;
+        }
+    }
+
+    //READ player and game information
+    public static ObservableList<PlayerAndGame> GetPlayerGameReport() {
+
+    ObservableList<PlayerAndGame> userInformation = FXCollections.observableArrayList();
+    Connection connection = null;
+
+
+        try
+    {
+        connection = DriverManager.getConnection(jbdcURL);
+        String sql = String.format("SELECT player_game_id, game_id, player_id, datetime(playing_date, 'unixepoch') as playing_date, score FROM playerandgame");
+        Statement statement  = connection.createStatement();
+        ResultSet result = statement.executeQuery(sql);
+
+        while (result.next())
+        {
+
+            int player_game_id = result.getInt("player_game_id");
+            int game_id = result.getInt("game_id");
+            int player_id = result.getInt("player_id");
+            Date playing_date = result.getDate("playing_date");
+            int score = result.getInt("score");
+
+            userInformation.addAll(new PlayerAndGame(player_game_id, game_id, player_id, playing_date, score));
+        }
+        return userInformation;
+    } catch (SQLException throwable) {
+        System.out.println("Error: Cannot connect to SQLite Database");
+        throwable.printStackTrace();
+        return userInformation;
+    }
+      finally {
+        // ensure database connection is closed
+        try {
+            if(connection != null) connection.close();
+            System.out.println("Connection Closed!");
+        }
+        catch(SQLException e) {
+            // connection close failed
+            System.err.println( e.getMessage() );
+        }
+    }
+   }
+
+    //READ player and game information for a specific player
+    public static ObservableList<PlayerAndGame> GetSpecificPlayerGameReport(int id) {
+
+        ObservableList<PlayerAndGame> userInformation = FXCollections.observableArrayList();
+        Connection connection = null;
+
+
+        try
+        {
+            connection = DriverManager.getConnection(jbdcURL);
+            String sql = String.format("SELECT player_game_id, game_id, player_id, datetime(playing_date, 'unixepoch') as playing_date, score FROM playerandgame where player_id = %d", id);
+            Statement statement  = connection.createStatement();
+            ResultSet result = statement.executeQuery(sql);
+
+            while (result.next())
+            {
+
+                int player_game_id = result.getInt("player_game_id");
+                int game_id = result.getInt("game_id");
+                int player_id = result.getInt("player_id");
+                Date playing_date = result.getDate("playing_date");
+                int score = result.getInt("score");
+                userInformation.addAll(new PlayerAndGame(player_game_id, game_id, player_id, playing_date, score));
+            }
+            return userInformation;
+        } catch (SQLException throwable) {
+            System.out.println("Error: Cannot connect to SQLite Database");
+            throwable.printStackTrace();
+            return userInformation;
+        }
+        finally {
+            // ensure database connection is closed
+            try {
+                if(connection != null) connection.close();
+                System.out.println("Connection Closed!");
+            }
+            catch(SQLException e) {
+                // connection close failed
+                System.err.println( e.getMessage() );
+            }
+        }
+    }
 }
