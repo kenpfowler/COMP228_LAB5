@@ -125,7 +125,6 @@ public class SQLiteDB {
             String contents = "";
             while (result.next())
             {
-                //TODO: need to be able to get for either player or game queries
                 int id = result.getInt("player_id");
                 String first_name = result.getString("first_name");
                 String last_name = result.getString("last_name");
